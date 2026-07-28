@@ -25,3 +25,6 @@ if __name__ == "__main__":
     memory_info = get_memory_info()
     print(f"CPU 信息：{cpu_info}")
     print(f"内存信息：{memory_info}")
+    
+    
+    111111
