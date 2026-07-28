@@ -26,6 +26,3 @@ if __name__ == "__main__":
     print(f"CPU 信息：{cpu_info}")
     print(f"内存信息：{memory_info}")
     
-    
-    111111
-    22222
