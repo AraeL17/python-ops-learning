@@ -10,10 +10,10 @@ def main():
     print(f"网络接口数量：{len(interfaces)}")
     
     # 逐个获取各个网卡的名字和地址列表（里面包含了ipv4，ipv6 和 mac地址，所以每一个类型是列表）
-    for interface_name, addressw_list in interfaces.items():
+    for interface_name, address_list in interfaces.items():
         print(f"\n网络接口：{interface_name}")
         
-        for address in addressw_list:
+        for address in address_list:
             # AF_INET 表示当前地址为 IPv4
             if address.family == socket.AF_INET:
                 family_name = "IPv4"
@@ -24,7 +24,7 @@ def main():
                 
             # AF_LINK 表示当前为链路层地址，通常是 MAC 地址
             elif address.family == socket.AF_LINK:
-                family_name = "IPv6"
+                family_name = "MAC"
 
             else:
                 family_name = "其他"
