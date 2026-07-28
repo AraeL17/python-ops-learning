@@ -13,7 +13,7 @@ def get_root_disk_info() -> dict:
     free_gb = bytes_to_gb(root_usage.free)
     percent = root_usage.percent
     
-    return {'toal_gb': total_gb, 'used_gb': used_gb , 'free_gb': free_gb, 'percent': percent}
+    return {'total_gb': total_gb, 'used_gb': used_gb , 'free_gb': free_gb, 'percent': percent}
 
 # 获取所有磁盘分区的基本信息，最终返回一个列表。
 def get_partition_info() -> list:
@@ -21,21 +21,22 @@ def get_partition_info() -> list:
     
     # 获取系统分区信息
     partitions = psutil.disk_partitions()
-    for i in range(len(partitions)):
-        device = partitions[i].device
-        mountpoint = partitions[i].mountpoint
-        fstype = partitions[i].fstype
-        partition_list.append({'device': device, 'mountpoint': mountpoint, 'fstype': fstype})
+    for partition in partitions:
+        device = partition.device
+        mountpoint = partition.mountpoint
+        fstype = partition.fstype
+        partition_list.append({'device': device,'mountpoint': mountpoint,'fstype': fstype})
     
     return partition_list
 
 def main():
     print(f"磁盘信息：{get_root_disk_info()}")
     
-    print("\n 分区信息：")
-    partiton_list = get_partition_info()
-    for item in range(len(partiton_list)):
-        print(partiton_list[item])
+    print("\n分区信息：")
+    partition_list = get_partition_info()
+    print(f"分区数量：{len(partition_list)}")
+    for item in partition_list:
+        print(item)
         
 if __name__ == "__main__":
     main()
