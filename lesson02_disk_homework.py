@@ -2,7 +2,7 @@ import psutil
 
 def bytes_to_gb(byte):
     gb = byte / 1024 ** 3
-    return round(gb,2)  
+    return round(gb, 2)  
 
 # 返回根目录所在磁盘的信息，并返回字典
 def get_root_disk_info() -> dict:
@@ -13,7 +13,7 @@ def get_root_disk_info() -> dict:
     free_gb = bytes_to_gb(root_usage.free)
     percent = root_usage.percent
     
-    return {'total_gb': total_gb, 'used_gb': used_gb , 'free_gb': free_gb, 'percent': percent}
+    return {'total_gb':total_gb, 'used_gb':used_gb , 'free_gb':free_gb, 'percent':percent}
 
 # 获取所有磁盘分区的基本信息，最终返回一个列表。
 def get_partition_info() -> list:
@@ -25,7 +25,10 @@ def get_partition_info() -> list:
         device = partition.device
         mountpoint = partition.mountpoint
         fstype = partition.fstype
-        partition_list.append({'device': device,'mountpoint': mountpoint,'fstype': fstype})
+        partition_list.append({'device': device, 
+                                'mountpoint': mountpoint, 
+                                'fstype': fstype
+                            })
     
     return partition_list
 
