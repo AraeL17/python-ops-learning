@@ -1,5 +1,5 @@
-import socket
-import psutil
+import socket   # python标准库
+import psutil   # 第三方库
 
 def main():
     # 获取所有网络接口及其地址信息
