@@ -8,7 +8,7 @@ def get_top_cpu_processes(limit=10, interval=1) -> list:
     
     # 依然和第五个作业一样，使用 psutil.process_iter() 获取每个进程的数据
     # 再使用 attrs 属性来设置获取进程的信息
-    # 设置 ad_value=None ,为无权限读取为便为 None
+    # 设置 ad_value=None ,为无权限读取设为 None
     processes = psutil.process_iter(
         attrs=['pid', 'name'],
         ad_value=None
@@ -18,14 +18,15 @@ def get_top_cpu_processes(limit=10, interval=1) -> list:
         try:
             # 第一次调用 cpu_percent(interval=None) 是初始化采样，
             # interval=None：为时间为 None ， 所以运行这个只是初始一下数据
-            # 第一次得到的 0.0 没有实际意义，因此不保存结果，
+            # interval=None 表示立即返回，不在 cpu_percent() 内部等待
+            # 第一次调用用于建立 CPU 时间基准，这次返回的 0.0 不使用
             # 但是把这个元素添加到列表中，用来第二次采样
             process.cpu_percent(interval=None)
             
             # 将初始化好的进程，添加到列表中，这样可以使第二次采样接着使用同一对象
             process_objects.append(process)
             
-        # 进程肯呢个已经结束，或者当前用户没有读取权限，就跳过这个进程
+        # 进程可能已经结束，或者当前用户没有读取权限，就跳过这个进程
         except (psutil.NoSuchProcess, psutil.AccessDenied):
             continue
         
@@ -33,7 +34,7 @@ def get_top_cpu_processes(limit=10, interval=1) -> list:
     
     process_list = []
         
-    # 进行第二次遍历：第二次获取间隔 interval 秒过后内对 CPU 使用频率
+    # 进行第二次遍历：第二次获取间隔 interval 秒过后的 CPU 使用率
     for process in process_objects:
         try:
             cpu_percent = process.cpu_percent(interval=None)
