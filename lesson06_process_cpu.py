@@ -55,6 +55,8 @@ def get_top_cpu_processes(limit=10, interval=1) -> list:
     # key 指定按照什么排序，
     # reverse=True 表示从大到小进行排序
     process_list.sort(
+        # lambda item: item['cpu_percent'] 这个是个函数，
+        # 把每个字典的cpu_percent 的信息取出来，给sort的key排序
         key=lambda item: item['cpu_percent'],
         reverse=True
     )
