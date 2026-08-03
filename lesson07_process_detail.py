@@ -21,13 +21,15 @@ def format_timestamp(timestamp):
 def get_process_detail(pid) -> dict:
     # 根据 pid 获取指定进程的相信信息
     
+    # 作用是检查系统中是否存在指定 PID 的进程，返回布尔值：
+    # True 进程存在 ，False 进程不存在
     if not psutil.pid_exists(pid):
         return {
             'error': f"pid {pid} 不存在"
         }
         
     try:
-        # Process(pid) 根据指定 pid 创建进程对象
+        # 根据 PID 实例化一个 Process 对象，用于查询已有进程
         process = psutil.Process(pid)
         
         # as_dict() 一次获取进程的多个属性，并返回字典
@@ -52,35 +54,28 @@ def get_process_detail(pid) -> dict:
         return {
             # 当前进程的 PID
             "pid": info["pid"],
-
             # ppid 是父进程的 PID
             "ppid": info["ppid"],
-
             # 进程名称
             "name": info["name"],
-
             # 进程当前状态
             "status": info["status"],
-
             # 启动进程的系统用户
             "username": info["username"],
-
             # 可执行程序的绝对路径
             "exe": info["exe"],
-
             # 启动进程时使用的命令及参数，通常是列表
             "cmdline": info["cmdline"],
-
             # 进程当前的工作目录
             "cwd": info["cwd"],
-
             # 将进程启动时间转换为日期时间字符串
             "create_time": format_timestamp(info["create_time"]),
-
             # 进程当前包含的线程数量
             "num_threads": info["num_threads"]
         }
         
+    # pid_exists() 只能说明执行这行代码时进程是否存在。
+    # 所以还需要判断其他方便关于这个 pid 可能的异常
     except psutil.NoSuchProcess:
         return {
             'error': f'PID {pid} 已经结束'
@@ -92,14 +87,20 @@ def get_process_detail(pid) -> dict:
         }
         
 def main():
+    # Process() 没有传入 PID 时，
+    # 表示当前正在执行这段代码的 Python 进程，并返回对应的 Process 对象。
     current_process = psutil.Process()
     
+    # 获取 Process 的 pid
     target_pid = current_process.pid
     
     print(f"正在查询 PID：{target_pid}")
     
     process_detail = get_process_detail(target_pid)
     
+    # 如果在函数中遇到错误，那么就直接返回一个 'error' 键的元素的字典
+    # 所以直接判断字典里面存不存在 error 键的元素，如果有就直接打印错误退出函数即可
+    # 就不用再执行下面打印字典的代码了
     if "error" in process_detail:
         print(process_detail["error"])
         return
