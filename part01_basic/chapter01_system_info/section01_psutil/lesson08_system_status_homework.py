@@ -1,4 +1,5 @@
 from datetime import datetime
+import time
 
 import psutil
 
@@ -147,11 +148,15 @@ def get_system_health(
     time_info = get_boot_info()
     boot_time = time_info['boot_time']
     
-    uptime = f"{boot_time['uptime_days']}天{boot_time['uptime_hours']}小时{boot_time['uptime_minutes']}分钟"
+    uptime = (
+        f"{time_info['uptime_days']}天"
+        f"{time_info['uptime_hours']}小时"
+        f"{time_info['uptime_minutes']}分钟"
+    )
     
-    looged_info = get_logged_in_users()
+    logged_info = get_logged_in_users()
     
-    logged_in_user_count = len(looged_info)
+    logged_in_user_count = len(logged_info)
     
     swap_info = get_swap_info()
     
@@ -175,7 +180,7 @@ def get_system_health(
     else:
         load_status = "正常"
         
-    overall_status = "警告"
+    overall_status = "正常"
     
     if swap_status == "警告" or load_status == "警告":
         overall_status = "警告"
@@ -198,10 +203,10 @@ def main():
     print(f"启动时间：{system_info['boot_time']}")
     print(f"运行时长：{system_info['uptime']}")
     print(f"登录用户数量：{system_info['logged_in_user_count']}")
-    print(f"Swap 使用率：{system_info['swap_percent']}")
+    print(f"Swap 使用率：{system_info['swap_percent']}%")
     print(f"Swap 状态：{system_info['swap_status']}")
     print(f"1分钟负载：{system_info['load_1']}")
-    print(f"归一化负载：{system_info['normalized_load_1_percent']}")
+    print(f"归一化负载：{system_info['normalized_load_1_percent']}%")
     print(f"负载状态：{system_info['load_status']}")
     print(f"总体状态：{system_info['overall_status']}")
     
